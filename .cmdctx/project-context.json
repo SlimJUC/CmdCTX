@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-04-17T22:03:15.874752671Z",
+  "project_root": "~/go/cmdctx",
+  "frameworks": [
+    {
+      "name": "Go",
+      "category": "language",
+      "confidence": "high",
+      "evidence": [
+        "file: go.mod",
+        "ext: .go"
+      ]
+    }
+  ],
+  "log_dirs": [],
+  "config_dirs": [
+    "~/go/cmdctx/internal/config"
+  ],
+  "important_files": [
+    "~/go/cmdctx/go.mod",
+    "~/go/cmdctx/go.sum"
+  ],
+  "extensions": {
+    ".go": 27,
+    ".mod": 1,
+    ".sum": 1
+  },
+  "ignored_dirs": [],
+  "default_excludes": [
+    ".git",
+    "node_modules",
+    "vendor",
+    "dist",
+    "build",
+    ".cache",
+    ".next",
+    ".nuxt",
+    "target",
+    "__pycache__",
+    ".tox",
+    ".venv",
+    "venv",
+    ".idea",
+    ".vscode"
+  ],
+  "scan_mode": "safe",
+  "scan_stats": {
+    "total_files": 29,
+    "total_dirs": 23
+  },
+  "notes": [
+    "Detected Go (language, confidence: high)",
+    "Top file types: .go(27), .mod(1), .sum(1)"
+  ]
+}
