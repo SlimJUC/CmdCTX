@@ -6,7 +6,7 @@
 #    curl -fsSL https://raw.githubusercontent.com/SlimJUC/CmdCTX/main/scripts/install.sh | bash
 #
 #  Environment overrides (set before piping to bash):
-#    INSTALL_DIR    Target directory  (default: ~/.local/bin  or  /usr/local/bin when root)
+#    INSTALL_DIR    Target directory  (default: /usr/local/bin)
 #    REPO_URL       Git clone URL     (default: https://github.com/SlimJUC/CmdCTX.git)
 #    REPO_BRANCH    Branch/tag        (default: main)
 #
@@ -112,11 +112,10 @@ resolve_install_dir() {
   if [ -n "${INSTALL_DIR:-}" ]; then
     return
   fi
-  if $FORCE_GLOBAL || [ "$(id -u)" -eq 0 ]; then
-    INSTALL_DIR="/usr/local/bin"
-  else
-    INSTALL_DIR="$HOME/.local/bin"
-  fi
+  # Default to the system-wide bin so the binary is immediately available in
+  # every shell without sourcing any profile.  The install functions already
+  # fall back to sudo when the directory is not writable by the current user.
+  INSTALL_DIR="/usr/local/bin"
 }
 
 # ── require a command ─────────────────────────────────────────────────────────
@@ -391,10 +390,24 @@ print_done() {
     printf "  ${C_BOLD}${BINARY}${C_RESET} is ready.\n\n"
   fi
   printf "  Next steps:\n"
-  printf "    1.  Open a new terminal  (or: source your shell profile)\n"
-  printf "    2.  ${C_CYAN}%-22s${C_RESET}  # scan machine + project context\n" "cmdctx init"
-  printf "    3.  ${C_CYAN}%-22s${C_RESET}  # verify setup\n"                    "cmdctx doctor"
-  printf "    4.  ${C_CYAN}%-22s${C_RESET}  # configure an AI provider\n"         "cmdctx providers"
+
+  # Only prompt the user to reload their shell if the install directory was not
+  # already present in $PATH (e.g. a custom INSTALL_DIR override was used and
+  # patch_path() added it to a shell profile).
+  local step=1
+  case ":${PATH}:" in
+    *":${INSTALL_DIR}:"*) ;;
+    *)
+      printf "    %d.  Open a new terminal  (or: source your shell profile)\n" "$step"
+      step=$(( step + 1 ))
+      ;;
+  esac
+
+  printf "    %d.  ${C_CYAN}%-22s${C_RESET}  # scan machine + project context\n" "$step"       "cmdctx init"
+  step=$(( step + 1 ))
+  printf "    %d.  ${C_CYAN}%-22s${C_RESET}  # verify setup\n"                    "$step"       "cmdctx doctor"
+  step=$(( step + 1 ))
+  printf "    %d.  ${C_CYAN}%-22s${C_RESET}  # configure an AI provider\n"         "$step"       "cmdctx providers"
   printf "\n"
   printf "  Docs: https://github.com/SlimJUC/CmdCTX\n\n"
 }
