@@ -1,0 +1,26 @@
+# Build output
+bin/
+dist/
+coverage.out
+coverage.html
+
+# Go toolchain artifacts
+*.test
+*.prof
+
+# AI context file — kept local only, never committed
+claude.md
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+
+# Env / secrets
+.env
+.env.*
+!.env.example
